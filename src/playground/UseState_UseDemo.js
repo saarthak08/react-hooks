@@ -1,8 +1,21 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 
 const UseStateDemo = (props) => {
   const [count, setCount] = useState(props.count);
   const [text, setText] = useState(props.text);
+
+  useEffect(()=>{
+    console.log('useEffect ran for count')
+    document.title=count
+  },[count]);
+
+  useEffect(()=>{
+    console.log("This will run only once!");
+  },[]);
+
+  useEffect(()=>{
+    console.log('useEffect ran for text');
+  },[text]);
 
   return (
     <div>
