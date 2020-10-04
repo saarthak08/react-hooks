@@ -1,41 +1,31 @@
 import React, { useReducer, useEffect } from "react";
 import NoteForm from "./NoteForm";
 import NoteList from "./NoteList";
+import NotesContext from "../context/Notes-Context";
 import notesReducer from "../reducers/Note";
 
-const NoteApp = (props) => {
-  const [notes, notesDispatch] = useReducer(notesReducer, []);
+const NoteApp = () => {
+    const [notes, notesDispatch] = useReducer(notesReducer, []);
 
 
+    useEffect(() => {
+        const notes = JSON.parse(localStorage.getItem("notes"));
+        if (notes) {
+            notesDispatch({ type: "POPULATE_NOTES", notes });
+        }
+    }, []);
 
-  const removeNote = (e, index) => {
-    e.preventDefault();
-    notesDispatch({ type: "REMOVE_NOTE", index });
-  };
+    useEffect(() => {
+        localStorage.setItem("notes", JSON.stringify(notes));
+    }, [notes]);
 
-  const addNote = (e, title, body) => {
-    e.preventDefault();
-    notesDispatch({ type: "ADD_NOTE", title, body });
-  };
-
-  useEffect(() => {
-    const notes = JSON.parse(localStorage.getItem("notes"));
-    if (notes) {
-      notesDispatch({ type: "POPULATE_NOTES", notes });
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  }, [notes]);
-
-  return (
-    <div>
+    return (
+      <NotesContext.Provider value={{ notes, notesDispatch }}>
       <h1>Notes</h1>
-      <NoteForm addNote={addNote} />
-      <NoteList notes={notes} removeNote={removeNote} />
-    </div>
-  );
+      <NoteForm/>
+      <NoteList />
+    </NotesContext.Provider>
+    );
 };
 
 export default NoteApp;

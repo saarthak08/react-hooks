@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import NotesApp from "./components/NotesApp";
+import NoteApp from "./components/NoteApp";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <NotesApp />
-  </React.StrictMode>,
-  document.getElementById("root")
+    <React.StrictMode>
+        <NoteApp />
+    </React.StrictMode>,
+    document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

@@ -1,20 +1,27 @@
-import React from "react";
+import React, { useContext } from "react";
+import NotesContext from "../context/Notes-Context";
+import useMousePosition from '../hooks/useMousePosition';
 
-export default (props) => {
 
- 
-  return (
-    <div>
-      <h3 style={{ display: "inline-block" }}>{props.note.title}</h3>
-      &nbsp;&nbsp;
-      <button
-        style={{ display: "inline-block" }}
-        onClick={(e) => props.removeNote(e, props.index)}
-      >
-        Remove
-      </button>
-      &nbsp;&nbsp;
-      {props.note.body && <p>{props.note.body}</p>}
-    </div>
-  );
+const Note = (props) => {
+    const { notesDispatch } = useContext(NotesContext);
+    const position = useMousePosition();
+
+    const removeNote = (e, index) => {
+        e.preventDefault();
+        notesDispatch({ type: "REMOVE_NOTE", index });
+    };
+
+    return (
+        <>
+            <h3>{props.note.title}</h3>
+            {props.note.body && <p>{props.note.body}</p>}
+            <p>
+                {position.x}, {position.y}
+            </p>
+            <button onClick={(e) => removeNote(e, props.index)}>Remove</button>
+        </>
+    );
 };
+
+export default Note;
