@@ -2,30 +2,87 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
 
-const App = (props) => {
-  const [count, setCount] = useState(props.count);
-  const [text,setText] = useState(props.text);
+const NotesApp = (props) => {
+  const [notes, setNotes] = useState([]);
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [addBodyToggle, setAddBodyToggle] = useState(false);
 
+  const addNote = (e) => {
+    e.preventDefault();
+    setNotes([...notes, { title }]);
+    setTitle("");
+  };
+
+  const removeNote = (e, index) => {
+    e.preventDefault();
+    setNotes(
+      notes.filter((tempNote, i) => {
+        return i !== index;
+      })
+    );
+  };
+
+  const addBodyOnClick = (e) => {
+    e.preventDefault();
+    setAddBodyToggle(!addBodyToggle);
+  };
+
+  const onSubmitBodyForm = (e, index) => {
+    e.preventDefault();
+    setNotes(
+      notes.filter((note, i) => {
+        if (index === i) {
+          note.body = body;
+        }
+        return note;
+      })
+    );
+    setAddBodyToggle(!addBodyToggle);
+  };
   return (
     <div>
-      <p>The current {text || 'count'} : {count}</p>
-      <button onClick={()=>setCount(count + 1)}>+1</button>&nbsp;
-      <button onClick={()=>setCount(count - 1)}>-1</button>&nbsp;
-      <button onClick={()=>setCount(0)}>Reset</button>&nbsp;
-      <input type='text' onChange={(e)=>setText(e.target.value)}></input>
+      <h1>Notes</h1>
+      <form onSubmit={addNote}>
+        <input value={title} onChange={(e) => setTitle(e.target.value)}></input>
+        &nbsp;
+        <button>Add Note</button>
+      </form>
+      {notes.map((note, index) => {
+        return (
+          <div key={index}>
+            <h3 style={{ display: "inline-block" }}>{note.title}</h3>
+            &nbsp;&nbsp;
+            <button
+              style={{ display: "inline-block" }}
+              onClick={(e) => removeNote(e, index)}
+            >
+              Remove
+            </button>
+            &nbsp;&nbsp;
+            <button
+              style={{ display: "inline-block" }}
+              onClick={(e) => addBodyOnClick(e)}
+            >
+              {addBodyToggle ? "x" : "+"}
+            </button>
+            {note.body && <p>{note.body}</p>}
+            {addBodyToggle && (
+              <form onSubmit={(e) => onSubmitBodyForm(e, index)}>
+                <input onChange={(e) => setBody(e.target.value)}></input>&nbsp;
+                <button>Set Body</button>
+              </form>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };
 
-App.defaultProps = {
-  count:0,
-  text:''
-};
-
-
 ReactDOM.render(
   <React.StrictMode>
-    <App count={2}/>
+    <NotesApp />
   </React.StrictMode>,
   document.getElementById("root")
 );
