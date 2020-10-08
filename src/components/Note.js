@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import NotesContext from "../context/Notes-Context";
+import NotesContext from "../context/NotesContext";
 import useMousePosition from '../hooks/useMousePosition';
 
 
