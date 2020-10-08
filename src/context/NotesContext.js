@@ -23,3 +23,5 @@ export const NotesContextProvider = (props) => {
         </NotesContext.Provider>
     );
 };
+
+export default NotesContext;
